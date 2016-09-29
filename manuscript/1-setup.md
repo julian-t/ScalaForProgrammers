@@ -1,3 +1,5 @@
+-# Part 1 - Introduction
+
 # Getting Set Up
 
 This first lesson gets you set up ready for the rest of the chapters.

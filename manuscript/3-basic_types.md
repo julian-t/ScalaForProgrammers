@@ -1,3 +1,5 @@
+-# Part 2 - The Basics
+
 # Basic Types
 
 We've seen a couple of Scala's types (`Int`, `Double` and `String`), but before we go much further, let's look at the other basic types that Scala gives us to play with. Create some val objects in the REPL:

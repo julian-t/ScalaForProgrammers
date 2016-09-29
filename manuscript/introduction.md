@@ -1,7 +1,9 @@
 # Scala For Programmers
 W> This is a work in progress! Check back regularly for updated versions.
 
-This book is for programmers who are interested in learning the Scala language.
+This book is for programmers who are interested in learning the Scala language. It is designed to give you a concise introduction to the essentials of programming in Scala. It won't visit all the dark corners or deal with many advanced topics, but by the end of the book you should be confident to start using Scala in projects, and have a good idea of where to go next.
+
+## Prerequisites
 
 I'm assuming the following knowledge on your part:
 
