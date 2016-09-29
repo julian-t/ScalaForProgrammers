@@ -1,7 +1,7 @@
 introduction.md
 1-setup.md
 2-REPL.md
-3-building-programs.md
+3-building.md
 4-basic_types.md
 5-val_and_var.md
 6-functions.md
