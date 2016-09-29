@@ -1,10 +1,12 @@
 introduction.md
 1-setup.md
 2-REPL.md
+2a-building-programs.md
 3-basic_types.md
 4-val_and_var.md
 5-functions.md
 6-flow_control.md
 7-operators.md
+8-OO.md
 y-type_system.md
 x-evaluation.md
