@@ -17,9 +17,15 @@ I'm not assuming that you know anything about functional programming - we'll tal
 
 ## How I Approach Scala
 
-If you care about writing good code, then you know that it isn't good enough for code to use the latest languages and tools. It has to be tested and maintainable, and if you work in a commercial environment, that might mean you having to visit code you wrote a year ago at 3am on a Sunday morning, in order to fix an outage.
+If you care about writing good code, then you know that it isn't good enough for code to use the latest languages and tools, or allow the developer to show off his (and it almost always is 'his') knowledge. 
+
+Good code has to be tested and maintainable, and if you work in a commercial environment, that might mean you having to visit code you wrote a year ago at 3am on a Sunday morning, in order to fix an outage. When that happens, you'll be very glad that you took the time to write good, maintainable code.
 
 So we'll mention build tools and testing as we go, and there will be minimum of flashy, show-off stuff, especially when we get to the functional part. The emphasis is on writing solid code to Get Stuff Done.
+
+### A Note for Java Programmers
+
+This book isn't primarily intended for people who know Java, so I'm not going to make too many comparisons or assume too much Java knowledge. You will, however, find some notes in the text where there is something that will be of particular interest to Java devs.
 
 ## Other Stuff
 
