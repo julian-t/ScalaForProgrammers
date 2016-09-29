@@ -8,5 +8,5 @@ introduction.md
 6-flow_control.md
 7-operators.md
 8-OO.md
-y-type_system.md
-x-evaluation.md
+9-evaluation.md
+10-type_system.md
