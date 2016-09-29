@@ -16,3 +16,5 @@ I'm not assuming that you know anything about functional programming - we'll tal
 Also available in PDF, ePub and Mobi formats from LeanPub
 
 The book is copyright 2016 by Julian Templeman, all rights reserved.
+
+W> This is the Github version!!!
