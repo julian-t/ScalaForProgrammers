@@ -58,7 +58,7 @@ scala> p1.first = "dave"
 
 You can make a constructor parameter a `var` in order to make it mutable, but please don't. We'll see better ways to handle mutable state later.
 
+## Adding Members
+
 ## Object Construction
 Secondary constructors
-
-## Adding Members
