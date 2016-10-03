@@ -60,5 +60,106 @@ You can make a constructor parameter a `var` in order to make it mutable, but pl
 
 ## Adding Members
 
+Members can be added to classes by placing them in braces, like this:
+
+~~~~~~~~
+scala> class Person(val first: String, val last: String) {
+     |   val name = first + " " + last
+     | }
+defined class Person
+
+
+scala> val p2 = new Person1("steve", "james")
+p2: Person = Person@14e2e1c3
+
+scala> p2.name
+res14: String = steve james
+~~~~~~~~
+
+The class now has a field called `name`. Since it is a `val`, it is initialized on object creation and is immutable. This is fine, because `first` and `last` are also immutable.
+
+Q> What would be the effect of changing the definition of `name` from `val` to `def`? See the end of the chapter for the answer.
+
+You can add methods as well as fields to classes. Let's add date of birth (which presumably is immutable) and a function to return the age.
+
+~~~~~~~~
+scala> import java.time._
+import java.time._
+
+scala> class Person(val first: String, val last: String, 
+               val dob: LocalDate) {
+     |   val name = first + " " + last
+     |
+     |   def age = LocalDate.now.getYear - dob.getYear
+     | }
+defined class Person
+
+scala> val aDate = LocalDate.of(1982, Month.APRIL, 2)
+aDate: java.time.LocalDate = 1982-04-02
+
+scala> val p4 = new Person("john", "frances", aDate)
+p4: Person = Person@74834afd
+
+scala> p4.age
+res19: Int = 34
+~~~~~~~~
+
+This code uses the Java 8 date and time library, and makes its members available without qualification by using an `import` statement. See chapter **X** for more details on libraries and imports.
+
+### Defining Your Own Getters and Setters
+
+You saw how to add a field to a class when you declared `name` as a `val`, but what if you want to add a settable field? Using a `var` is one solution, but that isn't satisfactory if you want to add some code to validate the getter or setter.
+
+You can define a pair of getter and setter by providing two `def`s: a getter with the name of the value, say `xxx`, and a setter called `xxx_=`. The `_=` tells the Scala compiler that this is a getter method.
+
+~~~~~~~~
+scala> import java.time._
+import java.time._
+
+scala> class Person(val first: String, val last: String) {
+     |   val name = first + " " + last
+     |   
+     |   private var privateAge = 0
+     |   
+     |   def age = privateAge
+     |   def age_=(newAge: Int) = {
+     |     if (newAge > privateAge) privateAge = newAge
+     |   }
+     | }
+defined class Person
+~~~~~~~~
+
+
 ## Object Construction
-Secondary constructors
+The parameters that you provide in the class definition define the *primary constructor* for the class. It is possible to add other constructors, should you wish, and these are called *secondary (or auxiliary) constructors*.
+
+Suppose that the Person class keeps track of when each instance is created. You can supply a value when you create an instance, but it would be useful to default it to 'now':
+
+~~~~~~~~
+scala> import java.time._
+import java.time._
+
+scala> class Person(val first: String, val last: String, 
+               val created: LocalDateTime) {
+     |   val name = first + " " + last
+     |   
+     |   def this(first: String, last: String) {
+     |     this(first, last, LocalDateTime.now)
+     |   }
+     | }
+defined class Person
+~~~~~~~~
+
+A method called `this` defines an auxiliary constructor, and you can see that it uses the procedure syntax, because it doesn't have an `=` before the body.
+
+Secondary constructors must end up calling the primary constructor. The idea here is that the primary constructor defines the set of parameters that are necessary for a well-formed object, so it must be called at some point.
+
+T> If you want to call the primary constructor with a fixed value, then a default argument will be a better solution.
+
+## Exercise
+
+Create an `Address`, add field to `Person`, exercise it
+
+## Hints and Answers
+
+The effect of changing the definition of `name` from `val` to `def` is that it will now be evaluated every time it is used.
