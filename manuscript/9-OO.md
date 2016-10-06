@@ -156,6 +156,18 @@ Secondary constructors must end up calling the primary constructor. The idea her
 
 T> If you want to call the primary constructor with a fixed value, then a default argument will be a better solution.
 
+### Scala and Java
+
+If you're not a Java programmer you can skip this section, which mentions three differences between creating classes in Java and Scala.
+
+You won't notice these when using the REPL, but when creating classes in source files there are three major differences between Scala and Java.
+
+Firstly, there is no link between class and file names. You can have a class called `Hello` in `HelloWorld.scala` and that's fine.
+
+Secondly, you may have noticed that you don't put `public` in front of class names. This is because there are no public classes in Scala.
+
+And thirdly, you can have more than one class per file, although they will still compile down to separate class files, as required by the JVM.
+
 ## Exercise
 
 Create an `Address`, add field to `Person`, exercise it
