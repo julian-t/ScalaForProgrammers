@@ -222,7 +222,13 @@ scala>
 
 The first example looks just like a switch. We have taken an `Int` and matched against several possible values, printing out a suitable message. The final case uses the underscore as a wildcard, and so it will match any value. Doing this makes the match complete rather than partial. You can see this is the second example, where there isn't a case for matching the input, and so the result is a `MatchError`.
 
-Since everything in Scala is an expression, it should not be surprising that you can get the result of a `match`, and that is shown in the final example.
+This will look like a simple switch to anyone who has used a C-family language, but there are some differences to be aware of.
+
+Since everything in Scala is an expression, it should not be surprising that you can get the result of a `match`, as shown in the final example.
+
+Secondly, there is no fall-through between cases when using `match`.
+
+The third one you've already seen: if there isn't a case that matches, a `MatchError` will be thrown.
 
 ### Match and Functions
 
