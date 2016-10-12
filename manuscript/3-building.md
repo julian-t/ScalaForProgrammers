@@ -52,7 +52,15 @@ T> Giving `scala` a filename (`HelloApp.class`) rather than a class name (`Hello
 
 -- for details on how Scala locates classes, see Chapter xx (Packages, Imports and the Classpath)
 
-## Meet sbt
+## Meet SBT
+Most programming languages have at least one command-line build system. The C family of languages have several: `make`, `cmake` and `gmake` to name but three. Clojure has `lein`, F# has `fake`, and Java has `ant` and `maven`.
+
+Scala has `SBT`, the Simple Build Tool, which, although definitely a build tool, is not particularly simple.
+
+You can download SBT and read the documetation on the 
+[SBT web site](http://www.scala-sbt.org/), and [SBT in Action](https://www.manning.com/books/sbt-in-action) by Josh Suereth provides in-depth advice on using it.
+
+We won't use SBT in this book, but it is definitely helpful for a Scala developer to know something about it, and so you'll find details of how to create and run a simple Scala project in Appendix A.
 
 ## IDEs
 
