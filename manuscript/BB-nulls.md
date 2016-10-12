@@ -29,7 +29,7 @@ In order to build a robust type system, Scala has a `Null` type that has only on
 
 `Null` is what is known as a *bottom type*, because it appears at the bottom of the type hierarchy. It is a subclass of every reference type, and so `null` can be assigned to any value that inherits from `AnyRef`.
 
-But even though Scala defines `null`, it isn't used very often. How we deal with nulls is dealt with in the followong section.
+But even though Scala defines `null`, it isn't used very often. How we deal with nulls is dealt with in the following section.
 
 ### Handling Nulls
 If a value could be null, it would be very useful to be able to see this in function signatures. For example, suppose that a `getCustomerDetails(customerId: Int)` function may return a null if no such customer exists. Simply returning a `Customer` reference does not tell us this, and the developer has to check.
@@ -40,7 +40,8 @@ Scala has introduced the `Option[T]` type to deal with this. An `Option[T]` (whi
 
 `Option[T]` has two subtypes: `Some[T]` to hold a value of type `T`, and `None` to show that there isn't a value.
 
-### Using Option[T]
+### Using `Option[T]`
+
 Let's start with a simple example:
 
 ~~~~~~~~
