@@ -115,9 +115,64 @@ Matched abc and _
 
 ### Using Guards
 
-## Case Classes
-Case classes allow pattern matching on objects without requiring a lot of boilerplate code.
+Matches can be refined using case guards to apply a condition, as in the following example:
 
-### Adding unapply To Classes
+~~~~~~~~
+scala> val n = 3
+n: Int = 3
+
+scala> n match {
+     | case a: Int if a < 3  => println("less than 3")
+     | case b: Int if b == 3 => println("equal to 3")
+     | case c: Int if c > 3  => println("greater than 3")
+     | case _ =>
+     | }
+equal to 3
+~~~~~~~~
+
+Guards can be constructed with all the usual logical operators, so you can build logical expressions of arbitrary complexity.
+
+## Case Classes
+A *case class* is a class that allows you to pattern matching on objects without requiring a lot of boilerplate code. As you might expect, case classes are used a lot with cases in pattern matching.
+
+Let's define a simple case class to represent an amount of money, together with a method to add two `Money` objects:
+
+~~~~~~~~
+case class Money(val amount: Double, val currency: String = "GBP") {
+  def + (other: Money) =
+    if (other.currency == currency) Money(amount+other.amount, currency)
+    else throw new IllegalArgumentException("Can't add different currencies")
+}
+~~~~~~~~
+
+Here's how you use it:
+
+~~~~~~~~
+scala> val m1 = Money(10.0)
+m1: Money = Money(10.0,GBP)
+
+scala> val m2 = Money(12.0, "GBP")
+m2: Money = Money(12.0,GBP)
+
+scala> val m3 = m1 + m2
+m3: Money = Money(22.0,GBP)
+~~~~~~~~
+
+You may have noticed the lack of `new` when creating `Money` instances; this is because you get several things for free when you make a class a case class. These include a companion object with an `apply` method for creating instances, and implementations of some of the common methods inherited from `java.lang.object`: `toString`, `hashCode` and `equals`.
+
+This explains how the `Money` objects were created, and how they were printed out by the REPL.
+
+Since you get all this for free, you may be wondering why we don't make every class a case class. One big reason is that, while they can extend traits, case classes can't be extended by other classes, and so can't be used to build inheritance hierarchies.
+
+This means that you tend to use case classes for value types, which typically aren't used to build inheritance hierarchies and have a sensible string representation.
+
+### Matching Using Case Classes
+
+Now you have a case class, you can easily use it in patterns.
+
+~~~~~~~~
+~~~~~~~~
+
+### Adding `unapply` To Classes
 
 What if you want to use a class with pattern matching, but it cannot be a case class because it is part of an inheritance hierarchy? When this happens, you can implement a method called `unapply`, which is what makes pattern matching work for case classes.
