@@ -23,6 +23,10 @@ Good code has to be tested and maintainable, and if you work in a commercial env
 
 So we'll mention build tools and testing as we go, and there will be minimum of flashy, show-off stuff, especially when we get to the functional part. The emphasis is on writing solid code to Get Stuff Done.
 
+There's another thing to note here too. Developers tend to come to Scala from two directions. First, there are the "Java without semicolons" people, familiar with Java, the JVM and OO programming, who are looking to try functional programming. Then there are the "Haskell on the JVM" folks, who have a background in functional programming and are familiar with immutable data, map, reduce and monads.
+
+This book is aimed at the first group, as they form by far the majority of the people I come across when teaching Scala.
+
 ### A Note for Java Programmers
 
 This book isn't primarily intended for people who know Java, so I'm not going to make too many comparisons or assume too much Java knowledge. You will, however, find some notes in the text where there is something that will be of particular interest to Java devs.
