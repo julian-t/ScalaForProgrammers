@@ -145,6 +145,8 @@ This can be written more concisely using `map` and `getOrElse`. The `map` takes 
 
 Note how this is created as `Option(3.0)` instead of `Some(3.0)`. If declared as `Some`, the `match` won't compile because `Some` can't match `None`, but `Option` is the superclass and so can match both.
 
+There's a lot more to using `Option`, as we'll see when we talk about functional operations on collections.
+
 ## Handling Exceptions
 Exceptions are a feature supported by many languages, and they have been around for a long time[^2].
 
@@ -168,4 +170,52 @@ From a more practical point of view, the idea of an exception as an object that 
 ### Functional Exception Handling
 In order to be properly functional, code should always return a value. If there is a chance that there may be an exception, then the code should be able to return either the result, or an exception object. Doing this means that it doesn't matter where the code executes, it has predictable behaviour, and it lets the caller decide how and when to handle the error.
 
-Scala does this using the `Try[T]` type.
+It would be possible to do this using `Option`, returning a `Some` when an operation has worked, and `None` if it failed, but the problem here is that you wouldn't have any idea what had gone wrong. Here's how you might use it:
+
+~~~~~~~~
+scala> def toInteger(s: String): Option[Int] = 
+     |   try {
+     |     val n = s.toInt
+     |     Some(n)
+     |   }
+     |   catch {
+     |     case ex: NumberFormatException => None
+     |   }
+toInteger: (s: String)Option[Int]
+
+scala> toInteger("123")
+res30: Option[Int] = Some(123)
+
+scala> toInteger("12x")
+res31: Option[Int] = None
+~~~~~~~~
+
+The `String` class has a `toInt` method that tries to convert the string to an `Int`, throwing a `NumberFormatException` if it can't. So, if the conversion succeeds we return a `Some[Int]`, and if it doesn't, we return `None`. 
+
+Note that this approach demonstrates the behaviour we want: we always get a result, and we know that the function may fail. The only problem is that we have no information about what went wrong.
+
+### `Try[T]`
+Scala provides the `Try[T]` type for representing exceptions. `Try` is similar to `Option` in that a `Try` can have one of two values, but this time the values are `Success[T]` to hold the result, and `Failure` to hold an exception.
+
+We can now rewrite `toInteger` using `Try`:
+
+~~~~~~~~
+scala> import scala.util.{Try, Success, Failure}
+import scala.util.{Try, Success, Failure}
+
+scala> def toInteger(s: String): Try[Int] =
+     | try {
+     |   val n = s.toInt
+     |   Success(n)
+     | }
+     | catch {
+     |   case ex: NumberFormatException => Failure(ex)
+     | }
+toInteger: (s: String)scala.util.Try[Int]
+
+scala> toInteger("123")
+res32: Option[Int] = Success(123)
+
+scala> toInteger2("abc")
+res33: scala.util.Try[Int] = Failure(java.lang.NumberFormatException: For input string: "abc")
+~~~~~~~~
