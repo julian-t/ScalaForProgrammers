@@ -182,6 +182,20 @@ The difference between these may seem minor, but it has profound consequences. C
 
 A second consequence is that a loop only processes items one at a time. A construct such as `foreach` might be able to process many items in parallel: again, you're saying what you want done rather than how to do it.
 
+As another example, suppose you want to find the first odd number in a list. Here's how you could do it without using an explicit loop:
+
+~~~~~~~~
+scala> val lst = List(4, 6, 3, 2, 7, 1)
+lst: List[Int] = List(4, 6, 3, 2, 7, 1)
+
+scala> val f = lst.filter(_%2 != 0).head
+f: Int = 3
+~~~~~~~~
+
+The `filter` method filters the list elements, creating a new collection from those that are odd, and then takes the first element of that enclosing collection.
+
+You might think that this is inefficient, creating a second list but only using the first value. However, we'll see when we talk about lazy evaluation and collections that this need not be the case.
+
 ## Switching with match
 
 Many languages have a multi-way decision statement: C, C++, Java and C# have `switch`/`case`, Ruby and Visual Basic have `case`/`when`. All these can take the place of a chain of `if..else` statements, and are often more efficient.
