@@ -192,6 +192,12 @@ res31: Option[Int] = None
 
 The `String` class has a `toInt` method that tries to convert the string to an `Int`, throwing a `NumberFormatException` if it can't. So, if the conversion succeeds we return a `Some[Int]`, and if it doesn't, we return `None`. 
 
+The function also illustrates how to code up a traditional `try...catch` construct in Scala. The `try` is the same, but there is only one `catch` block, which contains a `case` for each type of exception you want to handle.
+
+> The fact that exceptions are handled by something that looks like a `match` is not a coincidence. The content of a `catch` is a *partial function*, which defines a map of possible values to expressions.
+
+**Note: insert forward or back ref to where these are discussed
+
 Note that this approach demonstrates the behaviour we want: we always get a result, and we know that the function may fail. The only problem is that we have no information about what went wrong.
 
 ### `Try[T]`
@@ -219,3 +225,10 @@ res32: Option[Int] = Success(123)
 scala> toInteger2("abc")
 res33: scala.util.Try[Int] = Failure(java.lang.NumberFormatException: For input string: "abc")
 ~~~~~~~~
+
+The only significant difference between using `Option` and `Try` is that the exception is now returned as a `Failure`.
+
+### Working With `Try[T]`
+
+Just like `Option[T]`, `Try[T]` can be thought of as a small container, and can be used with operations like `map`, `flatMap` and `filter`.
+ 
