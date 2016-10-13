@@ -231,4 +231,20 @@ The only significant difference between using `Option` and `Try` is that the exc
 ### Working With `Try[T]`
 
 Just like `Option[T]`, `Try[T]` can be thought of as a small container, and can be used with operations like `map`, `flatMap` and `filter`.
- 
+
+~~~~~~~~
+scala> def getUserName(n: Int): Try[String] = n match {
+  case 123 => Success("fred")
+  case _   => Failure(new IllegalArgumentException("No such user"))
+}
+getUserName: (n: Int)scala.util.Try[String]
+
+scala> val u = toInteger("123").map(getUserName)
+u: scala.util.Try[scala.util.Try[String]] = Success(Success(fred))
+
+scala> val u2 = toInteger("200").map(getUserName)
+u2: scala.util.Try[scala.util.Try[String]] = Success(Failure(java.lang.IllegalArgumentException: No such user))
+
+scala> val u3 = toInteger("200").flatMap(getUserName)
+u2: scala.util.Try[String] = Failure(java.lang.IllegalArgumentException: No such user)
+~~~~~~~~
