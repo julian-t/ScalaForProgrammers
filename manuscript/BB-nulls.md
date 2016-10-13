@@ -245,6 +245,24 @@ u: scala.util.Try[scala.util.Try[String]] = Success(Success(fred))
 scala> val u2 = toInteger("200").map(getUserName)
 u2: scala.util.Try[scala.util.Try[String]] = Success(Failure(java.lang.IllegalArgumentException: No such user))
 
-scala> val u3 = toInteger("200").flatMap(getUserName)
-u2: scala.util.Try[String] = Failure(java.lang.IllegalArgumentException: No such user)
+scala> val u3 = toInteger("200").map(getUserName).flatten
+u3: scala.util.Try[String] = Failure(java.lang.IllegalArgumentException: No such user)
+
+scala> val u4 = toInteger("200").flatMap(getUserName)
+u4: scala.util.Try[String] = Failure(java.lang.IllegalArgumentException: No such user)
+
+scala> val u5 = toInteger("200x").flatMap(getUserName)
+u5: scala.util.Try[String] = Failure(java.lang.NumberFormatException: For input string: "200x")
 ~~~~~~~~
+
+We now have a `getUserName` function that will return a name given a user's ID. If we want to convert a `String` to an `Int` and then use that to get the name, we can use `map`. The expression
+
+~~~~~~~~
+toInteger("200").map(getUserName)
+~~~~~~~~
+
+takes the result from `toInteger` and passes it to `map`, which takes the value out of the `Try` and passes it to `getUserName`. The return value from `getUserName` is then put back into the `Try`, which results in a `Success` inside a `Success`.
+
+If we use a string that doesn't map to a valid user, we get a `Failure` inside a `Success`, because the first operation worked but the second didn't.
+
+Dealing with nested types like this is not ideal, especially when we want to get the final value. As the code shows, `flatten` can be used to remove the outer 'layer', but `flatMap` is simpler to use.
