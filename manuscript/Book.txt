@@ -13,4 +13,8 @@ introduction.md
 xx-packages.md
 yy-patterns.md
 BB-nulls.md
+aa-functional.md
+bb-generics.md
+zz-collections.md
 App.A-SBT.md
+App.B-Monads.md
