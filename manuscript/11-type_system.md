@@ -2,7 +2,7 @@
 
 Now that you've seen how to create and use classes, let's take a few minutes to look at Scala's type system.
 
-![The Scala Type System](images/Scala_Types2.png)
+![The Scala Type System](images/Scala_Types.png)
 
 One of the characteristics of functional languages is that they tend to think a lot about types, and have type systems that let you give a lot of information to the compiler. Scala has to work within the constraints of what the JVM will allow, but it tries to have as complete a type system as possible.
 
