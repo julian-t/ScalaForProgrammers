@@ -8,8 +8,13 @@ Functional programming tends to use standard collections, such as `Map` and `Lis
 
 -- mutable and immutable
 
--- diagram of the collection hierarchy
-[The Collections Hierarchy](images/Scala_Collections.png)
+Here's a diagram of the collections hierarchy, showing traits in blue and classes in green.
+
+![The Collections Hierarchy](images/Scala_Collections.png)
+
+## Traversable and Iterable
+
+These two traits live at the top of the hierarchy.
 
 ## Arrays and Ranges
 
