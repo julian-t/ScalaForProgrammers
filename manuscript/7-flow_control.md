@@ -2,7 +2,7 @@
 
 You can now write functions, so this is a good place to look at the flow control constructs that Scala gives you.
 
-## Decisions with if
+## Decisions with `if`
 
 Every language has an `if`: here's how Scala's works:
 
@@ -149,7 +149,7 @@ scala>
 
 The only difference between these two, as you probably know, is when the check is done. The `while` loop is an __entry condition__ loop, checking its expression on entry, but `do..while` is an __exit condition__ loop. This means that the body of the `do..while` will always be executed once.
 
-## The for Loop
+## The `for` Loop
 
 The third looping construct we'll look at is the `for` loop. Although this is similiar to loops with the same name in other languages, Scala's for goes way beyond what they can do.
 
@@ -196,7 +196,7 @@ The `filter` method filters the list elements, creating a new collection from th
 
 You might think that this is inefficient, creating a second list but only using the first value. However, we'll see when we talk about lazy evaluation and collections that this need not be the case.
 
-## Switching with match
+## Switching with `match`
 
 Many languages have a multi-way decision statement: C, C++, Java and C# have `switch`/`case`, Ruby and Visual Basic have `case`/`when`. All these can take the place of a chain of `if..else` statements, and are often more efficient.
 
