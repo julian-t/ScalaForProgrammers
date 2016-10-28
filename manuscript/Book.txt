@@ -8,6 +8,7 @@ introduction.md
 7-flow_control.md
 8-operators.md
 9-OO.md
+9a-Inheritance_Traits.md
 10-evaluation.md
 11-type_system.md
 xx-packages.md
