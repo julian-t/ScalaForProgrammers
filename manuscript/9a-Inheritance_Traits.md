@@ -118,12 +118,34 @@ scala> class N1(name: String) extends P1(name) {
 ~~~~~~~~
 
 ## Traits
--- traits differ from interfaces in several ways
+Anyone who has developed in a 'modern' OO language will be familiar with the idea of an interface, a way of specifying behavior without implementing it. Here's a simple example in Java:
 
-* traits can contain default implementations of methods
-* they can be added to objects at creation time
-* they can require that classes using them implement particular behavior
-* they solve the "diamond inheritance" problem
+~~~~~~~~
+interface Printable {
+  void print();
+}
+~~~~~~~~
+
+The `Printable` interface defines one method, `print` that takes no arguments. Any type that wants to be a `Printable` needs to implement a method with the same signature.
+
+Where classes model the *is a* relationship, interfaces model a *can do* relationship that focusses on ability. For example, you can print both invoices and images, even though those classes may not be related.
+
+Scala's equivalent of interfaces are called *traits*, and they differ from interfaces in several ways
+
+* Traits can contain default implementations of methods
+* They can be added to objects at creation time
+* They can require that classes using them implement particular behavior
+* They solve the "[diamond inheritance](https://en.wikipedia.org/wiki/Multiple_inheritance)" problem
+
+Traits are very important, and it is fair to say that if you are going to consider yourself a Scala programmer, you need to have a good understanding of traits and how they work.
+
+If you look at the Scala documentation, you can see just how much traits are used.
+
+{width=60%, float=left}
+![Traits](images/traits.png)
+### Defining and Using Traits
+Traits allow you to specify behavior, but you can provide default implementations for methods. This is really useful where a trait may contain lots of methods, many of which can have sensible defaults, and makes the job of using the trait a lot simpler.
+
 
 Traits cannot have constructor parameters
 
