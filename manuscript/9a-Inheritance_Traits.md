@@ -133,7 +133,10 @@ Where classes model the *is a* relationship, interfaces model a *can do* relatio
 Scala's equivalent of interfaces are called *traits*, and they differ from interfaces in several ways
 
 * Traits can contain default implementations of methods
-* They can be added to objects at creation time
+* They can also contain abstract and concrete fields
+* They can extend other traits and classes
+* Classes can use multiple traits
+* Traits can be added to objects at creation time
 * They can require that classes using them implement particular behavior
 * They solve the "[diamond inheritance](https://en.wikipedia.org/wiki/Multiple_inheritance)" problem
 
@@ -141,17 +144,233 @@ Traits are very important, and it is fair to say that if you are going to consid
 
 If you look at the Scala documentation, you can see just how much traits are used.
 
-{width=60%, float=left}
+{width=60%}
 ![Traits](images/traits.png)
+
+Each of the T's denotes a trait type, so you can see how the collections are built from traits and objects.
+
+Although you can use traits like interfaces, implementing all the members yourself, Scala uses traits to add behaviour to classes.
+
+T> The term many Scala programmers use is *mix-in*, using traits to mix behavior into classes.
+
+Used in this way, traits provide a way to implement multiple inheritance without running into the problems you get when inheriting from classes.
+
 ### Defining and Using Traits
-Traits allow you to specify behavior, but you can provide default implementations for methods. This is really useful where a trait may contain lots of methods, many of which can have sensible defaults, and makes the job of using the trait a lot simpler.
+Traits allow you to specify behavior, but you can also provide default implementations for methods. This is really useful where a trait may contain lots of methods, many of which can have sensible defaults, and makes the job of using the trait a lot simpler.
 
+Here's an example of a trait defining shapes. It has fields and an implementation of the `move` method, but leaves implementing `area` up to classes that use it.
 
-Traits cannot have constructor parameters
+~~~~~~~~
+trait Shape {
+  private var x = 0
+  private var y = 0
 
-### Layering Traits
+  def position = (x, y)
+  def position(xp: Int, yp: Int): Unit = {
+    x = xp
+    y = yp
+  }
+
+  def move(dx: Int, dy: Int): Unit = {
+    x += dx
+    y += dy
+  }
+
+  def area(): Double
+}
+~~~~~~~~
+
+You could use this trait to create a `Circle` class, using the `extends` keyword:
+
+~~~~~~~~
+class Circle(val radius: Int) extends Shape {
+  def area = Math.PI * radius * radius
+}
+~~~~~~~~
+
+`Circle` has added `radius` as a property and defined the `area` method, but inherits everything else from `Shape`
+
+~~~~~~~~
+scala> val c1 = new Circle(5)
+c1: Circle = Circle@304b71a5
+
+scala> println(c1.position)
+(0,0)
+
+scala> c1.move(3,4)
+
+scala> println(c1.position)
+(3,4)
+
+scala> println(c1.area)
+78.53981633974483
+~~~~~~~~
+
+Traits cannot be instantiated, but only mixed into other types. This means that you can't use `new` to create an instance of a trait. Traits also cannot have constructor parameters, so you have to pass values through the implementing type:
+
+~~~~~~~~
+class Circle(val radius: Int, xp: Int = 0, yp: Int = 0) extends Shape {
+  position(xp, yp)
+
+  def area = Math.PI * radius * radius
+}
+~~~~~~~~
+
+The `Circle` optionally accepts position values and then uses the `position` method to set them.
+
+Of course, it is possible for a class to use more than one trait at a time. Consider the following two simple traits:
+
+~~~~~~~~
+trait Flying {
+	def fly = println("I can fly!")
+}
+
+trait Swimming {
+  def swim = println("I can swim!")
+}
+~~~~~~~~
+
+Seabirds, such as seagulls, can both fly and swim, and so would want to implement both traits. And, of course, since you have an implementation in a base trait, you can override it:
+
+~~~~~~~~
+class Seagull extends Flying with Swimming {
+  override def fly = println("Flying!")
+}
+~~~~~~~~
+
+The `extends` keyword is used for the first trait, and `with` is used for subsequent traits. If you have more than two traits, just add more `with` clauses (e.g. `class Foo extends A with B with C`)
+
+### Trait Linearization
+Suppose that you use a trait to define a logging mechanism, like this:
+
+~~~~~~~~
+trait Logger {
+  def log(msg: String)
+}
+
+trait ConsoleLogger extends Logger {
+  def log(msg: String) { println(msg) }
+}
+
+trait FileLogger extends Logger {
+  def log(msg: String) { println("file: " + msg) }
+}
+~~~~~~~~
+
+Th `ConsoleLogger` and `FileLogger` traits both implement the `log` method, and you can use them like this:
+
+~~~~~~~~
+class Foo extends ConsoleLogger {
+  def doIt = log("doing something")
+}
+~~~~~~~~
+
+What happens if you want to log both to the console and to a file? If you try using both traits, you'll get an error:
+
+~~~~~~~~
+scala> class Foo extends ConsoleLogger with FileLogger {
+     | def doIt = log("Doing something")
+     | }
+<console>:10: error: class Foo inherits conflicting members:
+  method log in trait ConsoleLogger of type (msg: String)Unit  and
+  method log in trait FileLogger of type (msg: String)Unit
+(Note: this can be resolved by declaring an override in class Foo.)
+       class Foo extends ConsoleLogger with FileLogger {
+             ^
+~~~~~~~~
+
+The problem here is that `Foo` has inherited two concrete implementations of `log`, and the compiler doesn't know which one to use.
+
+One solution to this problem is to use `override` when defining the traits:
+
+~~~~~~~~
+trait Logger {
+  def log(msg: String)
+}
+
+trait ConsoleLogger extends Logger {
+  override def log(msg: String) { println(msg) }
+}
+
+trait FileLogger extends Logger {
+  override def log(msg: String) { println("file: " + msg) }
+}
+~~~~~~~~
+
+You'll now find that the code compiles, and will run:
+
+~~~~~~~~
+scala> class Foo extends ConsoleLogger with FileLogger {
+     | def doIt = log("Doing something")
+     | }
+defined class Foo
+
+scala> val f = new Foo
+f: Foo = Foo@64b8f8f4
+
+scala> f.doIt
+file: Doing something
+~~~~~~~~
+
+But here's an interesting thing: switch round the order of the two traits in the class definition, and run the code again:
+
+~~~~~~~~
+scala> class Foo extends FileLogger with ConsoleLogger {
+     | def doIt = log("Doing something")
+     | }
+defined class Foo
+
+scala> val f = new Foo
+f: Foo = Foo@6bdf28bb
+
+scala> f.doIt
+Doing something
+~~~~~~~~
+
+The first version obviously invoked `log` in the `FileLogger`, while the second one invoked `log` in `ConsoleLogger`.
+
+This is an example of *trait linearization* in action. In many languages that support multiple inheritance, the inheritance tree for `Foo` would look like this:
+
+![Multiple inheritance](images/traits_MI.png)
+
+`Foo` would have two equivalent implementations of `log`, and the compiler wouldn't know which one to use. In contrast, Scala looks at it like this:
+
+![Scala traits](images/traits_Scala.png)
+
+When resolving which implementation to use, Scala starts at the far end of the chain of traits, and uses the first one it finds. This explains why you get a different result when you change the order of the traits.
 
 ### Adding Traits at Object Creation Time
+
+Trait linearization also lets you do something that is very neat. Suppose that you want to add another kind of logger, maybe one that sends an SMS message:
+
+~~~~~~~~
+trait SMSLogger extends Logger {
+  override def log(msg: String) { println("sms: " + msg) }
+}
+~~~~~~~~
+
+The `Foo` class has two kinds of logging built in, so how can you use this new logger without editing code and recompiling? Like this...
+
+~~~~~~~~
+scala> val f1 = new Foo with SMSLogger
+f1: Foo with SMSLogger = $anon$1@d2cc05a
+
+scala> f1.doIt
+sms: Doing something
+~~~~~~~~
+
+Using `with`, you can add a trait when you create an instance, effectively adding another item to the far end of the inheritance chain. Note the type of the instance: this isn't now a `Foo` but a `$anon$1`, a type that has been created for you.
+
+If you've done anything with unit testing and mocking, this should strike you as useful. How about being able to say
+
+~~~~~~~~
+val ds = new DataService with MockDAO
+~~~~~~~~
+
+### Layering Traits
+-- chaining traits so that one trait invokes a method in another
+
+### Placing Requirements on Implementing Classes
 
 ## Abstract Types
 As you might also expect, Scala supports abstract classes and methods, and it has a few additions above and beyond what you may be used to in other languages.
